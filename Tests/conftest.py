@@ -6,8 +6,7 @@ from CS235Flix.adapters import memory_repository
 from CS235Flix.adapters.memory_repository import MemoryRepository
 
 
-TEST_DATA_PATH = os.path.join('C:', os.sep,'Users', 'qiwen', 'Desktop', 'A2 - 235', 'CS235Flix', 'adapters', 'data')
-#TEST_DATA_PATH = os.path.join('C:', os.sep, 'Users', 'iwar006', 'Documents', 'Python dev', 'COVID-19', 'tests', 'data')
+TEST_DATA_PATH = os.path.join('C:', os.sep,'Users', 'qiwen', 'Documents', 'qkan100-compsci235-a2', 'tests', 'data')
 
 
 @pytest.fixture
