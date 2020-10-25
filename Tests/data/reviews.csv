@@ -1,0 +1,4 @@
+id,author-id,rank,review,timestamp, rating
+1,2,1,"This movie is fantastic!",2020-02-28 14:31:26,9
+2,1,1,"Yeah Freddie, good movie!",2020-02-28 14:39:51,8
+3,3,1,"Why would he do that !",2020-02-29 08:12:08,4
