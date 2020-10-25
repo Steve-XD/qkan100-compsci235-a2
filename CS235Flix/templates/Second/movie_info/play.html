@@ -1,0 +1,53 @@
+{% extends 'second_layout.html' %} {% block content %}
+<main id="main">
+    <div class = "showcase">
+        <div class = "bgslide">
+            <header style="height:90px;">
+                <div class = "nav">
+                    <div class = "logo">
+                        <a href = "{{ url_for('movies_bp.login_home') }}" class = "img_btn">
+                        <img src="../../static/img/CS235Flixlogo.png" alt="CS235flix"></a>
+                    </div>
+                </div>
+                <div class = "logout">
+                    <a href = "{{ url_for('authentication_bp.logout')}}" class="btn btn-rounded">Logout</a>
+                </div>
+            </header>
+            <div class="showcase-movie-play">
+                <div class="showcase-movie-detail-info" style="padding-top:50px;">
+                    <h2 style="padding-bottom:10px;">You have watched {{movie_name}}</h2>
+                    <h2>Do you want to rate and give review?</h2>
+                    <div class="formwrapper">
+                        <form action="{{handler_url}}" method="post">
+                            {{form.movie_id}} <!-- Need to include this hidden field as it tracks the article being commented. -->
+                            {{form.csrf_token}} <!-- Need to include this token - Flask WTForms requires it. -->
+                            <br>
+                            <div class ="form-field">
+                                {{form.rate.label}}: {{form.rate}}</br>
+                                </br>
+                                {{form.comment.label}}
+                                </br>
+                                {{form.comment(size = 100, placeholder="Type your review", class="textarea", cols="50", rows="6", wrap="hard")}}
+                                {% if form.comment.errors %}
+                                    <ul class="errors">
+                                    {% for error in form.comment.errors %}
+                                        <li>{{error}}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            <div style="padding-right:20%;">
+                                <a href = "{{ url_for('movies_bp.login_home') }}">Back to Homepage</a>
+                                <div class="submit">{{ form.submit }}</div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+
+

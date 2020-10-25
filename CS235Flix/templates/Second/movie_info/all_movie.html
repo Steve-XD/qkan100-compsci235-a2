@@ -1,0 +1,90 @@
+{% extends 'second_layout.html' %} {% block content %}
+<main id="main">
+    <div class = "showcase">
+        <div class = "bgslide">
+            <header style="height:90px;">
+                <div class = "nav">
+                    <div class = "logo">
+                        <a href = "{{ url_for('movies_bp.login_home') }}" class = "img_btn">
+                        <img src="../../static/img/CS235Flixlogo.png" alt="CS235flix"></a>
+                    </div>
+                </div>
+                <div class="formwrapper_search">
+                    <form action="{{handler_url}}" method="post">
+                        {{form.csrf_token}} <!-- Need to include this token - Flask WTForms requires it. -->
+                        {{form.search(size = 25, placeholder="Search Movie, Director, or Actor", class="textarea", cols="50", rows="1", wrap="hard")}}
+                        <button type="submit" class="search_icon"><img src="../../static/img/search-icon.png" alt="submit"></button>
+                        {% if form.search.errors %}
+                            <ul class="errors">
+                            {% for error in form.search.errors %}
+                                <li>{{error}}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                    </form>
+                </div>
+                <div class = "logout">
+                    <a href = "{{ url_for('authentication_bp.logout')}}" class="btn btn-rounded">Logout</a>
+                </div>
+            </header>
+            <div class="movie_poster">
+            <hr>
+            <div class="selection">
+                <h2 style="padding-bottom:1%;">Genre</h2>
+                <form action="{{ url_for('movies_bp.list_all_movie', genre='All', year='All')}}" method="POST">
+                    {%if genres_condition == "All"%}
+                        <input type="submit" name="genre" value="All" class = "selection_btn_selected">
+                    {%else%}
+                        <input type="submit" name="genre" value="All" class = "selection_btn">
+                    {%endif%}
+                    {% for genre in genres %}
+                        {%if genres_condition == genre.genre_name%}
+                            <input type="submit" name="genre" value={{genre.genre_name}} class = "selection_btn_selected">
+                        {%else%}
+                            <input type="submit" name="genre" value={{genre.genre_name}} class = "selection_btn">
+                        {%endif%}
+                    {% endfor %}
+                    <h2 style="padding-bottom:1%;padding-top:1%;">Year</h2>
+                    {%if year_condition == "All"%}
+                        <input type="submit" name="year" value="All" class = "selection_btn_selected">
+                    {%else%}
+                        <input type="submit" name="year" value="All" class = "selection_btn">
+                    {%endif%}
+                    {% for year in years %}
+                        {%if year_condition == year| string()%}
+                            <input type="submit" name="year" value={{year}} class = "selection_btn_selected">
+                        {%else%}
+                            <input type="submit" name="year" value={{year}} class = "selection_btn">
+                        {%endif%}
+                    {% endfor %}
+                </form>
+            </div>
+            <hr>
+            <div class="movie-grid">
+                {%if movies == 'None'%}
+                    <p style="font-weight: bold;color:grey; font-size:40px; bottom:10%; left:50%;position: absolute;transform: translate(-50%, -50%);"
+                    >No Movie Found !</p>
+                {%else%}
+                    {% for movie in movies %}
+                    <div class="popular_movie">
+                        <a href = "{{url_for('movies_bp.movie_detail',rank=movie.rank)}}">
+                            {%if movie.image_hyperlink != 'None'%}
+                            <img src="{{movie.image_hyperlink}}" alt="no image found">
+                            {%else%}
+                            <img src="../../static/img/no-image.png">
+                            {%endif%}
+                        </a>
+                        <h1>{{movie.title}}<br>{{movie.rating}}/10</h1>
+                    </div>
+                    {% endfor %}
+                {%endif%}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</main>
+{% endblock %}
+

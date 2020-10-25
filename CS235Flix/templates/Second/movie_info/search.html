@@ -1,0 +1,88 @@
+{% extends 'second_layout.html' %} {% block content %}
+<main id="main">
+    <div class = "showcase">
+        <div class = "bgslide">
+            <header style="height:90px;">
+                <div class = "nav">
+                    <div class = "logo">
+                        <a href = "{{ url_for('movies_bp.login_home') }}" class = "img_btn">
+                        <img src="../../static/img/CS235Flixlogo.png" alt="CS235flix"></a>
+                    </div>
+                </div>
+                <div class="formwrapper_search">
+                    <form action="{{handler_url}}" method="post">
+                        {{form.csrf_token}} <!-- Need to include this token - Flask WTForms requires it. -->
+                        {{form.search(size = 25, placeholder="Search Movie, Director, or Actor", class="textarea", cols="50", rows="1", wrap="hard")}}
+                        <button type="submit" class="search_icon"><img src="../../static/img/search-icon.png" alt="submit"></button>
+                        {% if form.search.errors %}
+                            <ul class="errors">
+                            {% for error in form.search.errors %}
+                                <li>{{error}}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class = "logout">
+                    <a href = "{{ url_for('authentication_bp.logout')}}" class="btn btn-rounded">Logout</a>
+                </div>
+            </header>
+            <div class="search_result">
+            <h1 style="padding-left:3%; font-size:50px;">Search Result: {{search_text}}</h1>
+            <h2 style="padding-left:3%;">Result found: {{result_count}}</h2>
+            {%for class in search_dict%}
+                {%if class == "Movie"%}
+                    <h2 style="padding-left:50px; padding-top:50px;font-size:30px; color:grey;">Movie ({{search_dict["Movie"]|length}})</h2>
+                    <hr>
+                    {%for movie in search_dict["Movie"]%}
+                        <div class="search_info">
+                            {%if movie.image_hyperlink != 'None'%}
+                                <img src="{{movie.image_hyperlink}}" alt="no image found">
+                            {%else%}
+                                <img src="../../static/img/no-image.png">
+                            {%endif%}
+                            <a href="{{url_for('movies_bp.movie_detail',rank=movie.rank)}}">{{movie.title}} ({{movie.year}})</a>
+                            <h3>
+                                {%for genre in movie.genres%}
+                                {{genre.genre_name}} |
+                                {%endfor%}
+                                {{movie.rating}}/10 |
+                                {{movie.votes}} Votes |
+                                {{movie.runtime_minutes}} minutes
+                            </h3>
+                            <br/>
+                            <h3>{{movie.description}}</h3>
+                        </div>
+                        <hr>
+                    {%endfor%}
+
+                {%elif class == "Actor"%}
+                    <h2 style="clear:both;padding-left:50px; padding-top:50px;font-size:30px; color:grey;float:none;">Actor ({{search_dict["Actor"]|length}})</h2>
+                    <hr>
+                        {%for actor in search_dict["Actor"]%}
+                            <div class="search_info">
+                                <a href="{{url_for('movies_bp.movie_director_actor',a_class='actor',name=actor.actor_full_name)}}">{{actor.actor_full_name}}</a>
+                                <h3>Actor</h3>
+                            </div>
+                            <hr>
+                        {%endfor%}
+                {%else%}
+                    <h2 style="padding-left:50px; padding-top:50px;font-size:30px; color:grey;">Director ({{search_dict["Director"]|length}})</h2>
+                    <hr >
+                        {%for director in search_dict["Director"]%}
+                            <div class="search_info">
+                                <a href="{{url_for('movies_bp.movie_director_actor',a_class='director',name=director.director_full_name)}}">{{director.director_full_name}}</a>
+                                <h3>Director</h3>
+                            </div>
+                            <hr>
+                        {%endfor%}
+                {%endif%}
+            {%endfor%}
+        </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+
+

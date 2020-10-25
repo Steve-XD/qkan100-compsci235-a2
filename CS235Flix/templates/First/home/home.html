@@ -1,0 +1,18 @@
+{% extends 'first_layout.html' %} {% block content %}
+<main id="main">
+    <div class = showcase-top>
+        <a href = "{{ url_for('home_bp.home') }}" class = "img_btn">
+            <img src="../../static/img/CS235Flixlogo.png" alt="CS235flix"></a>
+        <a href = "{{ url_for('authentication_bp.login') }}" class = "btn btn-rounded">Sign In</a>
+    </div>
+    <div class = showcase-body>
+        <h1>Unlimited movies online!</h1>
+        <p>Watch anywhere with CS235Flix.</p>
+        <p1>Ready to watch with us? Press Sign Up button to get started.</p1>
+        <a href="{{ url_for('authentication_bp.register') }}" class = "btn btn-xl">
+            Sign Up ><i class="fas fa-chevron-right btn-icon"></i>
+        </a>
+    </div>
+</main>
+{% endblock %}
+

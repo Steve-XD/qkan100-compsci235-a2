@@ -1,0 +1,82 @@
+{% extends 'second_layout.html' %} {% block content %}
+<main id="main">
+    <div class = "showcase_home">
+        <div class = "bgslide_home">
+            <header style="height:90px;">
+                <div class = "nav">
+                    <div class = "logo">
+                        <a href = "{{ url_for('movies_bp.login_home') }}" class = "img_btn">
+                        <img src="../../static/img/CS235Flixlogo.png" alt="CS235flix"></a>
+                    </div>
+                </div>
+                <div class="formwrapper_search">
+                    <form action="{{handler_url}}" method="post">
+                        {{form.csrf_token}} <!-- Need to include this token - Flask WTForms requires it. -->
+                        {{form.search(size = 25, placeholder="Search Movie, Director, or Actor", class="textarea", cols="50", rows="1", wrap="hard")}}
+                        <button type="submit" class="search_icon"><img src="../../static/img/search-icon.png" alt="submit"></button>
+                        {% if form.search.errors %}
+                            <ul class="errors">
+                            {% for error in form.search.errors %}
+                                <li>{{error}}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class = "logout">
+                    <a href = "{{ url_for('authentication_bp.logout')}}" class="btn btn-rounded">Logout</a>
+                </div>
+            </header>
+            <div style="position:absolute; left:50px; top:100px;"> <h1>{{greeting}}, {{username}}</h1></div>
+            <div class="showcase-body">
+                <h1 style="color:#ea1e1e;">{{popular_movie[0].title}}</h1>
+                <a href = "{{url_for('movies_bp.movie_detail',rank=1)}}">
+                    <img src="{{popular_movie[0].image_hyperlink}}"></a>
+                <h1>{{popular_movie[0].rating}}/10</h1>
+                <p>{{popular_movie[0].description}}</p>
+            </div>
+        </div>
+
+        <div class="movie_poster">
+            <h3>Popular Movies<a
+                    style="font-size: 20px;text-decoration: underline; color: red;padding-left:1%;" href = "{{url_for('movies_bp.list_all_movie',genre='All',year='All')}}" >more</a>
+            </h3>
+            <hr>
+            <div class="movie-grid">
+                {% for movie in popular_movie %}
+                    {%if movie.rank != 1%}
+                    <div class="popular_movie">
+                        <a href = "{{url_for('movies_bp.movie_detail',rank=movie.rank)}}">
+                            <img src="{{movie.image_hyperlink}}"></a>
+                        <h1>{{movie.title}}<br>{{movie.rating}}/10</h1>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+     <div class="movie_poster">
+         <h3>Guess you might like</h3>
+         <hr>
+         <div class="movie-grid">
+                {% for movie in random_movie %}
+                    {%if movie.rank != 1%}
+                    <div class="popular_movie">
+                        <a href = "{{url_for('movies_bp.movie_detail',rank=movie.rank)}}">
+                            {%if movie.image_hyperlink != 'None'%}
+                            <img src="{{movie.image_hyperlink}}" alt="no image found">
+                            {%else%}
+                            <img src="../../static/img/no-image.png">
+                            {%endif%}
+                        </a>
+                        <h1>{{movie.title}}<br>{{movie.rating}}/10</h1>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+         </div>
+     </div>
+
+
+</main>
+{% endblock %}
+
